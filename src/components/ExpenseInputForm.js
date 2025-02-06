@@ -3,7 +3,7 @@ import { useState } from "react"
 import { nanoid } from "nanoid"
 
 const ExpenseInputForm = () => {
-  const [expenses, setExpenses] = useState([{ id: nanoid(), amount: 0, curreny: 'EUR' }])
+  const [expenses, setExpenses] = useState([{ id: nanoid(), amount: 0, currency: 'EUR' }])
 
   const handleExpenseChange = (event, index) => {
     const values = [...expenses]
@@ -12,22 +12,37 @@ const ExpenseInputForm = () => {
   }
 
   const handleAddExpense = () => {
-    setExpenses([...expenses, { id: nanoid(), amount: 0, curreny: 'EUR' }])
+    setExpenses([...expenses, { id: nanoid(), amount: 0, currency: 'EUR' }])
   }
 
   const handleDeleteExpense = (id) => {
-    let newExpenses = expenses.filter((expense) => expense.id != id)
-    setExpenses(newExpenses)
+    /* let newExpenses = expenses.filter((expense) => expense.id != id)
+    setExpenses(newExpenses) */
+    setExpenses((prevExpenses) => prevExpenses.filter((expense) => expense.id !== id))
   }
 
   return (
-    expenses.map((expense, index) => (
-      <div key={expense.id}>
-        <input type="number" onChange={(e) => handleExpenseChange(e, index)} value={expense.amount} className="border border-black" />
-        <button onClick={handleAddExpense}>+</button>
-        <button onClick={() => handleDeleteExpense(expense.id)}>-</button>
-      </div>
-    ))
+    <section>
+      {expenses.map((expense, index) => (
+        <div key={expense.id} className="flex gap-2">
+          <input
+            type="number"
+            onChange={(e) => handleExpenseChange(e, index)}
+            value={expense.amount}
+            className="border border-black"
+          />
+          <button onClick={handleAddExpense} className="border border-black p-1">+</button>
+          {expenses.length > 1 && (
+            <button
+              onClick={() => handleDeleteExpense(expense.id)}
+              className="border border-black p-1"
+            >
+              -
+            </button>
+          )}
+        </div>
+      ))}
+    </section>
   )
 }
 
